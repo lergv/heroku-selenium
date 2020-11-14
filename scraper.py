@@ -51,7 +51,7 @@ driver.get(url)
 
 #el = driver.find_element_by_class_name('numero ng-binding')[1]
 
-el = driver.find_element(By.XPATH, '//span[@class="numero ng-binding"]')[1]
+el = driver.find_elements(By.XPATH, '//span[@class="numero ng-binding"]')[1]
 
 
 
