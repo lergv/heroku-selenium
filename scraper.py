@@ -8,6 +8,10 @@ from datetime import datetime
 
 import os
 
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+db = SQLAlchemy(app)
+
 
 class Data(db.Model):
     __tablename__ = 'data'
@@ -48,11 +52,9 @@ el = driver.find_element_by_class_name('numero')
 
 
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
-db = SQLAlchemy(app)
 
-value = "el.text"
+
+value = el.text
 name = "count"
 type = "sreality"
         
