@@ -48,7 +48,7 @@ url = 'https://www.sreality.cz/hledani/prodej/byty/praha'
 
 driver.get(url)
 
-el = driver.find_element_by_class_name('numero')
+el = driver.find_element_by_class_name('numero')[1]
 
 
 
