@@ -1,7 +1,29 @@
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException, WebDriverException
 from selenium.webdriver.chrome.options import Options
+
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
+
 import os
+
+
+class Data(db.Model):
+    __tablename__ = 'data'
+    id = db.Column(db.Integer, primary_key=True)
+    value = db.Column(db.String(100), unique=True)
+    name = db.Column(db.String(300))
+    type = db.Column(db.String(100))
+    date = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __init__(self, value, name, type):
+        self.value = value
+        self.name = name
+        self.type = type
+
+
+
 
 CHROMEDRIVER_PATH = os.environ.get('CHROMEDRIVER_PATH', '/usr/local/bin/chromedriver')
 GOOGLE_CHROME_BIN = os.environ.get('GOOGLE_CHROME_BIN', '/usr/bin/google-chrome')
@@ -22,6 +44,24 @@ url = 'https://www.sreality.cz/hledani/prodej/byty/praha'
 driver.get(url)
 
 el = driver.find_element_by_class_name('numero')
+
+
+
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+db = SQLAlchemy(app)
+
+value = "el.text"
+name = "count"
+type = "sreality"
+        
+values = Data(value, name, type)
+db.session.add(values)
+db.session.commit()
+
+
+
 
 print(el.text)
 

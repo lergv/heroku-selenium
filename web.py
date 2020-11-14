@@ -1,30 +1,44 @@
 import os
 from flask import Flask, render_template
-from flask_alchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+import configparser
+
+config = configparser.ConfigParser()
+config.read('config_local.ini')
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+app.config['SQLALCHEMY_DATABASE_URI'] = config['DATABASE']['STRING']
 db = SQLAlchemy(app)
 
-class Feedback(db.Model):
-    __tablename__ = 'feedback'
+class Data(db.Model):
+    __tablename__ = 'data'
     id = db.Column(db.Integer, primary_key=True)
-    customer = db.Column(db.String(200), unique=True)
-    dealer = db.Column(db.String(200))
-    rating = db.Column(db.Integer)
-    comments = db.Column(db.Text())
+    value = db.Column(db.String(100), unique=True)
+    name = db.Column(db.String(300))
+    type = db.Column(db.String(100))
+    date = db.Column(db.DateTime, default=datetime.utcnow)
 
-    def __init__(self, customer, dealer, rating, comments):
-        self.customer = customer
-        self.dealer = dealer
-        self.rating = rating
-        self.comments = comments
+    def __init__(self, value, name, type):
+        self.value = value
+        self.name = name
+        self.type = type
+        
+    def __repr__(self):
+        return "<Data(value='%s', name='%s', type='%s', date='%s')>" % (self.value, self.name, self.type, self.date)
 
 
-
-@app.route('/',metods['POST','GET'])
+@app.route('/')#,methods=['POST','GET']
 def index():
+    value = "test"
+    name = "test"
+    type = "test"
+        
+    values = Data(value, name, type)
+    db.session.add(values)
+    db.session.commit()
+            
     return "Hello, World"
 
 
