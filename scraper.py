@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException, WebDriverException
 from selenium.webdriver.chrome.options import Options
 
@@ -48,8 +49,9 @@ url = 'https://www.sreality.cz/hledani/prodej/byty/praha'
 
 driver.get(url)
 
-el = driver.find_element_by_class_name('numero')[1]
+#el = driver.find_element_by_class_name('numero ng-binding')[1]
 
+el = driver.find_element(By.XPATH, '//span[@class="numero ng-binding"]')[1]
 
 
 
