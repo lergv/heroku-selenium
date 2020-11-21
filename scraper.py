@@ -6,7 +6,7 @@ from selenium.webdriver.chrome.options import Options
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-
+import re
 import os
 
 app = Flask(__name__)
@@ -21,12 +21,17 @@ class Data(db.Model):
     value = db.Column(db.String(100), unique=True)
     name = db.Column(db.String(300))
     type = db.Column(db.String(100))
+    value_int = db.Column(db.Integer)
     date = db.Column(db.DateTime, default=datetime.utcnow)
 
-    def __init__(self, value, name, type):
+    def __init__(self, value, value_int, name, type):
         self.value = value
+        self.value_int = value_int
         self.name = name
         self.type = type
+        
+    def __repr__(self):
+        return "<Data(value='%s', value_int='%s', name='%s', type='%s', date='%s')>" % (self.value, self.value_int, self.name, self.type, self.date)
 
 
 
@@ -60,13 +65,10 @@ el = driver.find_elements(By.XPATH, '//span[@class="numero ng-binding"]')[1]
 value = el.text
 name = "count"
 type = "sreality"
-        
-values = Data(value, name, type)
+regex = re.compile('[^0-9]')
+value_int = int(regex.sub('', el.text))
+
+values = Data(value, value_int, name, type)
 db.session.add(values)
 db.session.commit()
-
-
-
-
-print(el.text)
 
