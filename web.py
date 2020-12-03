@@ -10,9 +10,13 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 from flask import send_file
 
+from matplotlib.dates import DayLocator, HourLocator, DateFormatter, WeekdayLocator
+from matplotlib.dates import MO, TU, WE, TH, FR, SA, SU
+#pip install numpy==1.19.3
+
 config = configparser.ConfigParser()
-#config.read('./settings/config_local.ini')
-#print(config['DATABASE']['STRING'])
+config.read('./settings/config_local.ini')
+
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -45,17 +49,18 @@ def index():
 
 @app.route('/fig/')
 def fig():
-    fig = create_figure()
+    fig = create_plot()
     img = io.BytesIO()
     fig.savefig(img)
     img.seek(0)
     return send_file(img, mimetype='image/png')
 
+#2020-11-16 13:56:04.891475+00
 def get_data():
     sql_query = """select data.id,
-                    DATE_PART('days', data.date
-                        + '1 MONTH'::INTERVAL
-                        - '1 DAY'::INTERVAL) "day",
+                    date "day",
+                    --TO_CHAR(date :: DATE, 'dd/mm/yyyy')"day" ,
+                    --date_part('day',date) "day",
                     data.value_int
                     from data
                     where data.id in
@@ -74,6 +79,7 @@ def get_data():
     xs = []
     for r in result:
         ys.append(r['value_int'])
+        #xs.append(datetime.strptime(r['day'], '%Y-%m-%d %H:%M:%S.%f'))
         xs.append(r['day'])
 
     return [xs, ys]
@@ -84,7 +90,20 @@ def create_figure():
 
     result = get_data()
     axis.plot(result[0], result[1])
+    fig.autofmt_xdate()
     return fig
+
+def create_plot():
+    fig = Figure()
+    axis = fig.add_subplot(1, 1, 1)
+
+    result = get_data()
+    axis.plot_date(result[0], result[1], 'b-')
+    axis.xaxis.set_major_locator(DayLocator(interval=5))
+    
+    fig.autofmt_xdate()
+    return fig
+
 
 if __name__ == "__main__":
     app.run(debug=True)
