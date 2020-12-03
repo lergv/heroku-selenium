@@ -63,10 +63,13 @@ sourceList = [
 ]
 
 for source in sourceList:
+    print("url: ",source['url'])
     driver.get(source['url'])
     el = driver.find_elements(By.XPATH, '//span[@class="numero ng-binding"]')[1]
-
+    
     value = el.text
+
+    print("count: ",value)
     regex = re.compile('[^0-9]')
     value_int = int(regex.sub('', el.text))
 
