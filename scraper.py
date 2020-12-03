@@ -49,26 +49,29 @@ options.headless = True
 driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH , chrome_options=options)
 
 
-#url = 'https://www.amazon.es/Quimat-Pantalla-Raspberry-Protectiva-Disipadores/dp/B06W55HBTX/ref=pd_rhf_ee_s_pd_crcd_0_3/260-4071437-3846962?_encoding=UTF8&pd_rd_i=B06W55HBTX&pd_rd_r=db785bde-02bd-4dce-8abd-b6b47bd1caaa&pd_rd_w=smLre&pd_rd_wg=CSHiy&pf_rd_p=76e1f2b8-0692-47af-bb36-251bb7a6a038&pf_rd_r=NN3YXYSMHMQ6H415CEAH&psc=1&refRID=NN3YXYSMHMQ6H415CEAH'
-url = 'https://www.sreality.cz/hledani/prodej/byty/praha'
+sourceList = [
+	{
+		'url':'https://www.sreality.cz/hledani/prodej/byty/praha',
+		'type':"sreality",
+                'name':"count"
+	},
+	{
+		'url':'https://www.sreality.cz/hledani/pronajem/byty/praha',
+		'type':"sreality_pronajem",
+                'name':"count"
+	}
+]
 
-driver.get(url)
+for source in sourceList:
+    driver.get(source['url'])
+    el = driver.find_elements(By.XPATH, '//span[@class="numero ng-binding"]')[1]
 
-#el = driver.find_element_by_class_name('numero ng-binding')[1]
+    value = el.text
+    regex = re.compile('[^0-9]')
+    value_int = int(regex.sub('', el.text))
 
-el = driver.find_elements(By.XPATH, '//span[@class="numero ng-binding"]')[1]
-
-
-
-
-
-value = el.text
-name = "count"
-type = "sreality"
-regex = re.compile('[^0-9]')
-value_int = int(regex.sub('', el.text))
-
-values = Data(value, value_int, name, type)
-db.session.add(values)
-db.session.commit()
+    values = Data(value, value_int, source['name'], source['type'])
+    db.session.add(values)
+    db.session.commit()
+    
 
