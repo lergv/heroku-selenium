@@ -15,13 +15,13 @@ from matplotlib.dates import MO, TU, WE, TH, FR, SA, SU
 #pip install numpy==1.19.3
 
 config = configparser.ConfigParser()
-config.read('./settings/config_local.ini')
+#config.read('./settings/config_local.ini')
 
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
-#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
-app.config['SQLALCHEMY_DATABASE_URI'] = config['DATABASE']['STRING']
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+#app.config['SQLALCHEMY_DATABASE_URI'] = config['DATABASE']['STRING']
 db = SQLAlchemy(app)
 
 class Data(db.Model):
