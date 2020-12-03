@@ -20,8 +20,8 @@ config.read('./settings/config_local.ini')
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
-#app.config['SQLALCHEMY_DATABASE_URI'] = config['DATABASE']['STRING']
+#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+app.config['SQLALCHEMY_DATABASE_URI'] = config['DATABASE']['STRING']
 db = SQLAlchemy(app)
 
 class Data(db.Model):
@@ -71,9 +71,12 @@ def get_data():
                                 max(data.id) "max_id",
                                 max(data.date)
                             FROM data
+                            WHERE data.type = 'sreality'
                             group by 1
                             ORDER BY 1) as a
-                        ) ORDER BY date"""
+                        )
+                        AND data.type = 'sreality'
+                        ORDER BY date"""
     result = db.engine.execute(sql_query)
     ys = []
     xs = []
