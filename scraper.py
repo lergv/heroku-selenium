@@ -8,9 +8,13 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import re
 import os
+import configparser
+config = configparser.ConfigParser()
+#config.read('./settings/config_local.ini')
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+#app.config['SQLALCHEMY_DATABASE_URI'] = config['DATABASE']['STRING']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -65,8 +69,11 @@ sourceList = [
 for source in sourceList:
     print("url: ",source['url'])
     driver.get(source['url'])
-    el = driver.find_elements(By.XPATH, '//span[@class="numero ng-binding"]')[1]
-    
+    if (source['type'] == "sreality_pronajem"):
+        el = driver.find_elements(By.XPATH, '//span[@class="numero ng-binding"]')[0]
+    else:
+        el = driver.find_elements(By.XPATH, '//span[@class="numero ng-binding"]')[1]
+
     value = el.text
 
     print("count: ",value)
