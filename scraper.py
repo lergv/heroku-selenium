@@ -50,7 +50,7 @@ options.add_argument('--disable-gpu')
 options.add_argument('--no-sandbox')
 options.headless = True
 
-driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH , chrome_options=options)
+
 
 
 sourceList = [
@@ -67,10 +67,13 @@ sourceList = [
 ]
 
 for source in sourceList:
+
+    driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH , chrome_options=options)
+    
     print("url: ",source['url'])
     driver.get(source['url'])
     if (source['type'] == "sreality_pronajem"):
-        el = driver.find_elements(By.XPATH, '//span[@class="numero ng-binding"]')[0]
+        el = driver.find_elements(By.XPATH, '//span[@class="numero ng-binding"]')[1]
     else:
         el = driver.find_elements(By.XPATH, '//span[@class="numero ng-binding"]')[1]
 
