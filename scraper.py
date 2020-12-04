@@ -96,6 +96,7 @@ for source in sourceList:
         finally:
             print("Page loaded")
             el = driver.find_elements(By.XPATH, '//*')[0]
+            print(el)
 
 
 
