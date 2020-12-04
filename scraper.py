@@ -86,7 +86,7 @@ for source in sourceList:
     if (source['type'] == "sreality_pronajem" or source['type'] == "sreality" ):
         el = driver.find_elements(By.XPATH, '//span[@class="numero ng-binding"]')[1]
     if (source['type'] == "bezrealitky_prodej"):
-        timeout = 5
+        timeout = 20
         try:
             element_present = EC.presence_of_element_located((By.XPATH, '//span[@class="text-no-break"]'))
             WebDriverWait(driver, timeout).until(element_present)
