@@ -95,7 +95,7 @@ for source in sourceList:
             print("Timed out waiting for page to load")
         finally:
             print("Page loaded")
-            el = driver.find_elements(By.XPATH, 'span[@class="text-no-break"]')[0]
+            el = driver.find_elements(By.XPATH, 'span')[0]
 
 
 
