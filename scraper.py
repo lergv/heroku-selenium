@@ -3,6 +3,12 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException, WebDriverException
 from selenium.webdriver.chrome.options import Options
 
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+
+
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
@@ -80,7 +86,19 @@ for source in sourceList:
     if (source['type'] == "sreality_pronajem" or source['type'] == "sreality" ):
         el = driver.find_elements(By.XPATH, '//span[@class="numero ng-binding"]')[1]
     if (source['type'] == "bezrealitky_prodej"):
+        timeout = 5
+        try:
+            element_present = EC.presence_of_element_located((By.XPATH, '//span[@class="text-no-break"]'))
+            WebDriverWait(driver, timeout).until(element_present)
+        except TimeoutException:
+            print("Timed out waiting for page to load")
+        finally:
+            print("Page loaded")
+
         el = driver.find_elements(By.XPATH, '//span[@class="text-no-break"]')[0]
+
+
+
     value = el.text
 
     print("count: ",value)
