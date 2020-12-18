@@ -72,7 +72,7 @@ sourceList = [
                 'name':"count"
 	},
 	{
-		'url':'https://reality.idnes.cz/s/prodej/byty/praha/',
+		'url':'https://reality.idnes.cz/s/prodej/byty/praha',
 		'type':"idnes_prodej",
                 'name':"count"
 	}
