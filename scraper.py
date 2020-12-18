@@ -92,12 +92,12 @@ sourceList = [
 ##		'url':'https://www.bezrealitky.cz/vyhledat#offerType=prodej&estateType=byt&locationInput=Praha%2C%20Hlavn%C3%AD%20m%C4%9Bsto%20Praha%2C%20%C4%8Cesko&limit=15',
 ##		'type':"bezrealitky_prodej",
 ##                'name':"count"
-##	},
-	{
-		'url':'https://www.bezrealitky.cz/vyhledat#offerType=pronajem&estateType=byt&locationInput=Praha%2C%20Hlavn%C3%AD%20m%C4%9Bsto%20Praha%2C%20%C4%8Cesko&limit=15',
-		'type':"bezrealitky_pronajem",
-                'name':"count"
-	}
+##	}
+##	,{
+##		'url':'https://www.bezrealitky.cz/vyhledat#offerType=pronajem&estateType=byt&locationInput=Praha%2C%20Hlavn%C3%AD%20m%C4%9Bsto%20Praha%2C%20%C4%8Cesko&limit=15',
+##		'type':"bezrealitky_pronajem",
+##                'name':"count"
+##	}
 
         
 ]
@@ -116,9 +116,8 @@ for source in sourceList:
         el = driver.find_elements(By.XPATH, '//*[@id="search-content"]/form/div[2]/div[3]/div/div[3]/p/strong/span/span')[0]
     if (source['type'] == "idnes_prodej"):
         el = driver.find_elements(By.XPATH, '//p[@class="mb-10 h3 font-regular pull-t-left"]')[0]
-##    if (source['type'] == "idnes_pronajem"):
-##        el = driver.find_elements(By.XPATH, '//*[@id="snippet-s-result-articles"]/div[1]/div[1]/p[1]')
-##        print(el)
+    if (source['type'] == "idnes_pronajem"):
+        el = driver.find_elements(By.XPATH, '//*[@id="snippet-s-result-articles"]/div[1]/div[1]/p[1]')
         
 
 
