@@ -46,19 +46,31 @@ class Data(db.Model):
 
 
 
-CHROMEDRIVER_PATH = os.environ.get('CHROMEDRIVER_PATH', '/usr/local/bin/chromedriver')
-GOOGLE_CHROME_BIN = os.environ.get('GOOGLE_CHROME_BIN', '/usr/bin/google-chrome')
+#CHROMEDRIVER_PATH = os.environ.get('CHROMEDRIVER_PATH', '/usr/local/bin/chromedriver')
+#CHROMEDRIVER_PATH = os.environ.get('CHROMEDRIVER_PATH', r'D:/git/scraping/webdriver/chromedriver.exe')
 
+#GOOGLE_CHROME_BIN = os.environ.get('GOOGLE_CHROME_BIN', '/usr/bin/google-chrome')
+#GOOGLE_CHROME_BIN = os.environ.get('GOOGLE_CHROME_BIN', r'D:/git/scraping/webdriver/chromedriver.exe')
+
+
+##options = Options()
+##options.binary_location = GOOGLE_CHROME_BIN
+##options.add_argument('--disable-gpu')
+##options.add_argument('--no-sandbox')
+##options.headless = True
+##prefs = {"profile.managed_default_content_settings.images": 2}
+##
 
 options = Options()
-options.binary_location = GOOGLE_CHROME_BIN
-options.add_argument('--disable-gpu')
-options.add_argument('--no-sandbox')
+options.add_argument("start-maximized"); # open Browser in maximized mode
+options.add_argument("disable-infobars"); # disabling infobars
+options.add_argument("--disable-extensions"); # disabling extensions
+options.add_argument("--disable-gpu"); # applicable to windows os only
+options.add_argument("--disable-dev-shm-usage"); # overcome limited resource problems
+options.add_argument("--no-sandbox"); # Bypass OS security model
 options.headless = True
 prefs = {"profile.managed_default_content_settings.images": 2}
 options.add_experimental_option("prefs", prefs)
-
-
 
 sourceList = [
 	{
@@ -98,7 +110,7 @@ for source in sourceList:
 ##            el = driver.find_elements(By.XPATH, '//*')[0]
 ##            print(el)
     if (source['type'] == "idnes_prodej"):
-        el = driver.find_elements(By.XPATH, '//span[@class="mb-10 h3 font-regular pull-t-left"]')[0]
+        el = driver.find_elements(By.XPATH, '//p[@class="mb-10 h3 font-regular pull-t-left"]')[0]
 
 
     value = el.text
