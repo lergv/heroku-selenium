@@ -115,7 +115,7 @@ for source in sourceList:
     if (source['type'] == "idnes_prodej"):
         el = driver.find_elements(By.XPATH, '//p[@class="mb-10 h3 font-regular pull-t-left"]')[0]
     if (source['type'] == "idnes_pronajem"):
-        el = driver.find_elements(By.XPATH, '//p[@class="mb-10 h3 font-regular pull-t-left"]')[0]
+        el = driver.find_elements(By.XPATH, '//*[@id="snippet-s-result-articles"]/div[1]/div[1]/p[1]')[0]
 
 
     value = el.text
