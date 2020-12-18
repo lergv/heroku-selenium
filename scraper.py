@@ -45,11 +45,14 @@ class Data(db.Model):
 
 
 
-
+### PROD ###
 CHROMEDRIVER_PATH = os.environ.get('CHROMEDRIVER_PATH', '/usr/local/bin/chromedriver')
+### LOCAL ###
 #CHROMEDRIVER_PATH = os.environ.get('CHROMEDRIVER_PATH', r'D:/git/scraping/webdriver/chromedriver.exe')
 
+### PROD ###
 GOOGLE_CHROME_BIN = os.environ.get('GOOGLE_CHROME_BIN', '/usr/bin/google-chrome')
+### LOCAL ###
 #GOOGLE_CHROME_BIN = os.environ.get('GOOGLE_CHROME_BIN', r'D:/git/scraping/webdriver/chromedriver.exe')
 
 
@@ -84,7 +87,19 @@ sourceList = [
 		'url':'https://reality.idnes.cz/s/pronajem/byty/praha',
 		'type':"idnes_pronajem",
                 'name':"count"
+	},
+	{
+		'url':'https://www.bezrealitky.cz/vyhledat#offerType=prodej&estateType=byt&locationInput=Praha%2C%20Hlavn%C3%AD%20m%C4%9Bsto%20Praha%2C%20%C4%8Cesko&limit=15',
+		'type':"bezrealitky_prodej",
+                'name':"count"
+	},
+	{
+		'url':'https://www.bezrealitky.cz/vyhledat#offerType=pronajem&estateType=byt&locationInput=Praha%2C%20Hlavn%C3%AD%20m%C4%9Bsto%20Praha%2C%20%C4%8Cesko&limit=15',
+		'type':"bezrealitky_pronajem",
+                'name':"count"
 	}
+
+        
 ]
 
 for source in sourceList:
@@ -95,17 +110,8 @@ for source in sourceList:
     driver.get(source['url'])
     if (source['type'] == "sreality_pronajem" or source['type'] == "sreality" ):
         el = driver.find_elements(By.XPATH, '//span[@class="numero ng-binding"]')[1]
-##    if (source['type'] == "bezrealitky_prodej"):
-##        timeout = 60
-##        try:
-##            element_present = EC.presence_of_element_located((By.XPATH, 'span[@class="text-no-break"]'))
-##            WebDriverWait(driver, timeout).until(element_present)
-##        except TimeoutException:
-##            print("Timed out waiting for page to load")
-##        finally:
-##            print("Page loaded")
-##            el = driver.find_elements(By.XPATH, '//*')[0]
-##            print(el)
+    if (source['type'] == "bezrealitky_prodej" orsource['type'] ==  "bezrealitky_pronajem"):
+        el = driver.find_elements(By.XPATH, '//*[@id="search-content"]/form/div[2]/div[3]/div/div[3]/p/strong/span/span')[0]
     if (source['type'] == "idnes_prodej"):
         el = driver.find_elements(By.XPATH, '//p[@class="mb-10 h3 font-regular pull-t-left"]')[0]
     if (source['type'] == "idnes_pronajem"):
