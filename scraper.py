@@ -46,10 +46,10 @@ class Data(db.Model):
 
 
 
-#CHROMEDRIVER_PATH = os.environ.get('CHROMEDRIVER_PATH', '/usr/local/bin/chromedriver')
+CHROMEDRIVER_PATH = os.environ.get('CHROMEDRIVER_PATH', '/usr/local/bin/chromedriver')
 #CHROMEDRIVER_PATH = os.environ.get('CHROMEDRIVER_PATH', r'D:/git/scraping/webdriver/chromedriver.exe')
 
-#GOOGLE_CHROME_BIN = os.environ.get('GOOGLE_CHROME_BIN', '/usr/bin/google-chrome')
+GOOGLE_CHROME_BIN = os.environ.get('GOOGLE_CHROME_BIN', '/usr/bin/google-chrome')
 #GOOGLE_CHROME_BIN = os.environ.get('GOOGLE_CHROME_BIN', r'D:/git/scraping/webdriver/chromedriver.exe')
 
 
