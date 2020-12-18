@@ -53,14 +53,6 @@ GOOGLE_CHROME_BIN = os.environ.get('GOOGLE_CHROME_BIN', '/usr/bin/google-chrome'
 #GOOGLE_CHROME_BIN = os.environ.get('GOOGLE_CHROME_BIN', r'D:/git/scraping/webdriver/chromedriver.exe')
 
 
-##options = Options()
-##options.binary_location = GOOGLE_CHROME_BIN
-##options.add_argument('--disable-gpu')
-##options.add_argument('--no-sandbox')
-##options.headless = True
-##prefs = {"profile.managed_default_content_settings.images": 2}
-##
-
 options = Options()
 options.add_argument("start-maximized"); # open Browser in maximized mode
 options.add_argument("disable-infobars"); # disabling infobars
@@ -87,6 +79,11 @@ sourceList = [
 		'url':'https://reality.idnes.cz/s/prodej/byty/praha',
 		'type':"idnes_prodej",
                 'name':"count"
+	},
+	{
+		'url':'https://reality.idnes.cz/s/pronajem/byty/praha/',
+		'type':"idnes_pronajem",
+                'name':"count"
 	}
 ]
 
@@ -110,6 +107,8 @@ for source in sourceList:
 ##            el = driver.find_elements(By.XPATH, '//*')[0]
 ##            print(el)
     if (source['type'] == "idnes_prodej"):
+        el = driver.find_elements(By.XPATH, '//p[@class="mb-10 h3 font-regular pull-t-left"]')[0]
+    if (source['type'] == "idnes_pronajem"):
         el = driver.find_elements(By.XPATH, '//p[@class="mb-10 h3 font-regular pull-t-left"]')[0]
 
 
