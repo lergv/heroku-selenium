@@ -55,8 +55,16 @@ def fig():
     img.seek(0)
     return send_file(img, mimetype='image/png')
 
+@app.route('/fig_2/')
+def fig_2():
+    fig = create_plot_2()
+    img = io.BytesIO()
+    fig.savefig(img)
+    img.seek(0)
+    return send_file(img, mimetype='image/png')
+
 #2020-11-16 13:56:04.891475+00
-def get_data():
+def get_data_srelity_prodej():
     sql_query = """select data.id,
                     date "day",
                     --TO_CHAR(date :: DATE, 'dd/mm/yyyy')"day" ,
@@ -87,11 +95,43 @@ def get_data():
 
     return [xs, ys]
 
+
+def get_data_srelity_pronajem():
+    sql_query = """select data.id,
+                    date "day",
+                    --TO_CHAR(date :: DATE, 'dd/mm/yyyy')"day" ,
+                    --date_part('day',date) "day",
+                    data.value_int
+                    from data
+                    where data.id in
+                        (select a.max_id from
+                            (SELECT
+                                date_trunc('day', data.date) "day",
+                                count(*),
+                                max(data.id) "max_id",
+                                max(data.date)
+                            FROM data
+                            WHERE data.type = 'sreality_pronajem'
+                            group by 1
+                            ORDER BY 1) as a
+                        )
+                        AND data.type = 'sreality_pronajem'
+                        ORDER BY date"""
+    result = db.engine.execute(sql_query)
+    ys = []
+    xs = []
+    for r in result:
+        ys.append(r['value_int'])
+        #xs.append(datetime.strptime(r['day'], '%Y-%m-%d %H:%M:%S.%f'))
+        xs.append(r['day'])
+
+    return [xs, ys]
+
 def create_figure():
     fig = Figure()
     axis = fig.add_subplot(1, 1, 1)
 
-    result = get_data()
+    result = get_data_srelity_prodej()
     axis.plot(result[0], result[1])
     fig.autofmt_xdate()
     return fig
@@ -100,8 +140,19 @@ def create_plot():
     fig = Figure()
     axis = fig.add_subplot(1, 1, 1)
 
-    result = get_data()
+    result = get_data_srelity_prodej()
     axis.plot_date(result[0], result[1], 'b-')
+    axis.xaxis.set_major_locator(DayLocator(interval=5))
+    
+    fig.autofmt_xdate()
+    return fig
+
+def create_plot_2():
+    fig = Figure()
+    axis = fig.add_subplot(1, 1, 1)
+
+    result_pronajem = get_data_srelity_pronajem()
+    axis.plot_date(result_pronajem[0], result_pronajem[1], 'b-')
     axis.xaxis.set_major_locator(DayLocator(interval=5))
     
     fig.autofmt_xdate()
