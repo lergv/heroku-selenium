@@ -81,7 +81,7 @@ sourceList = [
                 'name':"count"
 	},
 	{
-		'url':'https://reality.idnes.cz/s/pronajem/byty/praha/',
+		'url':'https://reality.idnes.cz/s/pronajem/byty/praha',
 		'type':"idnes_pronajem",
                 'name':"count"
 	}
