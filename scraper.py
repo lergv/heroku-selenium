@@ -110,7 +110,7 @@ for source in sourceList:
     driver.get(source['url'])
     if (source['type'] == "sreality_pronajem" or source['type'] == "sreality" ):
         el = driver.find_elements(By.XPATH, '//span[@class="numero ng-binding"]')[1]
-    if (source['type'] == "bezrealitky_prodej" orsource['type'] ==  "bezrealitky_pronajem"):
+    if (source['type'] == "bezrealitky_prodej" or source['type'] ==  "bezrealitky_pronajem"):
         el = driver.find_elements(By.XPATH, '//*[@id="search-content"]/form/div[2]/div[3]/div/div[3]/p/strong/span/span')[0]
     if (source['type'] == "idnes_prodej"):
         el = driver.find_elements(By.XPATH, '//p[@class="mb-10 h3 font-regular pull-t-left"]')[0]
