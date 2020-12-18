@@ -72,8 +72,8 @@ sourceList = [
                 'name':"count"
 	},
 	{
-		'url':'https://www.bezrealitky.cz/vyhledat#offerType=prodej&estateType=byt&locationInput=Praha%2C%20Hlavn%C3%AD%20m%C4%9Bsto%20Praha%2C%20%C4%8Cesko&limit=15',
-		'type':"bezrealitky_prodej",
+		'url':'https://reality.idnes.cz/s/prodej/byty/praha/',
+		'type':"idnes_prodej",
                 'name':"count"
 	}
 ]
@@ -86,18 +86,19 @@ for source in sourceList:
     driver.get(source['url'])
     if (source['type'] == "sreality_pronajem" or source['type'] == "sreality" ):
         el = driver.find_elements(By.XPATH, '//span[@class="numero ng-binding"]')[1]
-    if (source['type'] == "bezrealitky_prodej"):
-        timeout = 60
-        try:
-            element_present = EC.presence_of_element_located((By.XPATH, 'span[@class="text-no-break"]'))
-            WebDriverWait(driver, timeout).until(element_present)
-        except TimeoutException:
-            print("Timed out waiting for page to load")
-        finally:
-            print("Page loaded")
-            el = driver.find_elements(By.XPATH, '//*')[0]
-            print(el)
-
+##    if (source['type'] == "bezrealitky_prodej"):
+##        timeout = 60
+##        try:
+##            element_present = EC.presence_of_element_located((By.XPATH, 'span[@class="text-no-break"]'))
+##            WebDriverWait(driver, timeout).until(element_present)
+##        except TimeoutException:
+##            print("Timed out waiting for page to load")
+##        finally:
+##            print("Page loaded")
+##            el = driver.find_elements(By.XPATH, '//*')[0]
+##            print(el)
+    if (source['type'] == "idnes_prodej"):
+        el = driver.find_elements(By.XPATH, '//span[@class="mb-10 h3 font-regular pull-t-left"]')[0]
 
 
     value = el.text
