@@ -88,12 +88,12 @@ sourceList = [
 		'type':"idnes_pronajem",
                 'name':"count"
 	}
+	,{
+		'url':'https://www.bezrealitky.cz/vyhledat#offerType=prodej&estateType=byt&locationInput=Praha%2C%20Hlavn%C3%AD%20m%C4%9Bsto%20Praha%2C%20%C4%8Cesko&limit=15',
+		'type':"bezrealitky_prodej",
+                'name':"count"
+	}
 ##	,{
-##		'url':'https://www.bezrealitky.cz/vyhledat#offerType=prodej&estateType=byt&locationInput=Praha%2C%20Hlavn%C3%AD%20m%C4%9Bsto%20Praha%2C%20%C4%8Cesko&limit=15',
-##		'type':"bezrealitky_prodej",
-##                'name':"count"
-##	},
-##	{
 ##		'url':'https://www.bezrealitky.cz/vyhledat#offerType=pronajem&estateType=byt&locationInput=Praha%2C%20Hlavn%C3%AD%20m%C4%9Bsto%20Praha%2C%20%C4%8Cesko&limit=15',
 ##		'type':"bezrealitky_pronajem",
 ##                'name':"count"
@@ -123,7 +123,6 @@ for source in sourceList:
 
 
     value = el.text
-    print("count: ",el)
     print("count: ",value)
 
     regex = re.compile('[^0-9]')
