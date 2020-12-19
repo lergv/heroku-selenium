@@ -16,11 +16,11 @@ import re
 import os
 import configparser
 config = configparser.ConfigParser()
-config.read('./settings/config_local.ini')
+#config.read('./settings/config_local.ini')
 
 app = Flask(__name__)
-#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
-app.config['SQLALCHEMY_DATABASE_URI'] = config['DATABASE']['STRING']
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+#app.config['SQLALCHEMY_DATABASE_URI'] = config['DATABASE']['STRING']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -46,14 +46,14 @@ class Data(db.Model):
 
 
 ### PROD ###
-#CHROMEDRIVER_PATH = os.environ.get('CHROMEDRIVER_PATH', '/usr/local/bin/chromedriver')
+CHROMEDRIVER_PATH = os.environ.get('CHROMEDRIVER_PATH', '/usr/local/bin/chromedriver')
 ### LOCAL ###
-CHROMEDRIVER_PATH = os.environ.get('CHROMEDRIVER_PATH', r'D:/git/scraping/webdriver/chromedriver.exe')
+#CHROMEDRIVER_PATH = os.environ.get('CHROMEDRIVER_PATH', r'D:/git/scraping/webdriver/chromedriver.exe')
 
 ### PROD ###
-#GOOGLE_CHROME_BIN = os.environ.get('GOOGLE_CHROME_BIN', '/usr/bin/google-chrome')
+GOOGLE_CHROME_BIN = os.environ.get('GOOGLE_CHROME_BIN', '/usr/bin/google-chrome')
 ### LOCAL ###
-GOOGLE_CHROME_BIN = os.environ.get('GOOGLE_CHROME_BIN', r'D:/git/scraping/webdriver/chromedriver.exe')
+#GOOGLE_CHROME_BIN = os.environ.get('GOOGLE_CHROME_BIN', r'D:/git/scraping/webdriver/chromedriver.exe')
 
 
 options = Options()
