@@ -16,7 +16,7 @@ import re
 import os
 import configparser
 config = configparser.ConfigParser()
-#config.read('./settings/config_local.ini')
+config.read('./settings/config_local.ini')
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
@@ -66,6 +66,7 @@ options.add_argument("--no-sandbox"); # Bypass OS security model
 ##options.headless = True
 ##prefs = {"profile.managed_default_content_settings.images": 2}
 ##options.add_experimental_option("prefs", prefs)
+
 
 sourceList = [
 ##	{
@@ -131,5 +132,6 @@ for source in sourceList:
     values = Data(value, value_int, source['name'], source['type'])
     db.session.add(values)
     db.session.commit()
+    driver.quit()
     
 
