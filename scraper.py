@@ -16,11 +16,11 @@ import re
 import os
 import configparser
 config = configparser.ConfigParser()
-#config.read('./settings/config_local.ini')
+config.read('./settings/config_local.ini')
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
-#app.config['SQLALCHEMY_DATABASE_URI'] = config['DATABASE']['STRING']
+#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+app.config['SQLALCHEMY_DATABASE_URI'] = config['DATABASE']['STRING']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -46,14 +46,14 @@ class Data(db.Model):
 
 
 ### PROD ###
-CHROMEDRIVER_PATH = os.environ.get('CHROMEDRIVER_PATH', '/usr/local/bin/chromedriver')
+#CHROMEDRIVER_PATH = os.environ.get('CHROMEDRIVER_PATH', '/usr/local/bin/chromedriver')
 ### LOCAL ###
-#CHROMEDRIVER_PATH = os.environ.get('CHROMEDRIVER_PATH', r'D:/git/scraping/webdriver/chromedriver.exe')
+CHROMEDRIVER_PATH = os.environ.get('CHROMEDRIVER_PATH', r'D:/git/scraping/webdriver/chromedriver.exe')
 
 ### PROD ###
-GOOGLE_CHROME_BIN = os.environ.get('GOOGLE_CHROME_BIN', '/usr/bin/google-chrome')
+#GOOGLE_CHROME_BIN = os.environ.get('GOOGLE_CHROME_BIN', '/usr/bin/google-chrome')
 ### LOCAL ###
-#GOOGLE_CHROME_BIN = os.environ.get('GOOGLE_CHROME_BIN', r'D:/git/scraping/webdriver/chromedriver.exe')
+GOOGLE_CHROME_BIN = os.environ.get('GOOGLE_CHROME_BIN', r'D:/git/scraping/webdriver/chromedriver.exe')
 
 
 options = Options()
@@ -63,9 +63,9 @@ options.add_argument("--disable-extensions"); # disabling extensions
 options.add_argument("--disable-gpu"); # applicable to windows os only
 options.add_argument("--disable-dev-shm-usage"); # overcome limited resource problems
 options.add_argument("--no-sandbox"); # Bypass OS security model
-options.headless = True
-prefs = {"profile.managed_default_content_settings.images": 2}
-options.add_experimental_option("prefs", prefs)
+##options.headless = True
+##prefs = {"profile.managed_default_content_settings.images": 2}
+##options.add_experimental_option("prefs", prefs)
 
 sourceList = [
 	{
@@ -83,21 +83,21 @@ sourceList = [
 		'type':"idnes_prodej",
                 'name':"count"
 	},
-##	{
-##		'url':'https://reality.idnes.cz/s/pronajem/byty/praha',
-##		'type':"idnes_pronajem",
-##                'name':"count"
-##	},
-##	{
-##		'url':'https://www.bezrealitky.cz/vyhledat#offerType=prodej&estateType=byt&locationInput=Praha%2C%20Hlavn%C3%AD%20m%C4%9Bsto%20Praha%2C%20%C4%8Cesko&limit=15',
-##		'type':"bezrealitky_prodej",
-##                'name':"count"
-##	}
-##	,{
-##		'url':'https://www.bezrealitky.cz/vyhledat#offerType=pronajem&estateType=byt&locationInput=Praha%2C%20Hlavn%C3%AD%20m%C4%9Bsto%20Praha%2C%20%C4%8Cesko&limit=15',
-##		'type':"bezrealitky_pronajem",
-##                'name':"count"
-##	}
+	{
+		'url':'https://reality.idnes.cz/s/pronajem/byty/praha',
+		'type':"idnes_pronajem",
+                'name':"count"
+	}
+	,{
+		'url':'https://www.bezrealitky.cz/vyhledat#offerType=prodej&estateType=byt&locationInput=Praha%2C%20Hlavn%C3%AD%20m%C4%9Bsto%20Praha%2C%20%C4%8Cesko&limit=15',
+		'type':"bezrealitky_prodej",
+                'name':"count"
+	},
+	{
+		'url':'https://www.bezrealitky.cz/vyhledat#offerType=pronajem&estateType=byt&locationInput=Praha%2C%20Hlavn%C3%AD%20m%C4%9Bsto%20Praha%2C%20%C4%8Cesko&limit=15',
+		'type':"bezrealitky_pronajem",
+                'name':"count"
+	}
 
         
 ]
@@ -111,19 +111,21 @@ for source in sourceList:
     if (source['type'] == "sreality_pronajem" or source['type'] == "sreality" ):
         el = driver.find_elements(By.XPATH, '//span[@class="numero ng-binding"]')[1]
     if (source['type'] ==  "bezrealitky_pronajem"):
-        el = driver.find_elements(By.XPATH, '//*[@id="search-content"]/form/div[2]/div[3]/div/div[3]/p/strong/span/span')[0]
+        el = driver.find_elements(By.XPATH, '//span[@class="text-no-break"]')[1]
     if (source['type'] == "bezrealitky_prodej"):
-        el = driver.find_elements(By.XPATH, '//*[@id="search-content"]/form/div[2]/div[3]/div/div[3]/p/strong/span/span')[0]
+        el = driver.find_elements(By.XPATH, '//span[@class="text-no-break"]')[1]
     if (source['type'] == "idnes_prodej"):
         el = driver.find_elements(By.XPATH, '//p[@class="mb-10 h3 font-regular pull-t-left"]')[0]
     if (source['type'] == "idnes_pronajem"):
-        el = driver.find_elements(By.XPATH, '//*[@id="snippet-s-result-articles"]/div[1]/div[1]/p[1]')
+        el = driver.find_elements(By.XPATH, '//p[@class="mb-10 h3 font-regular pull-t-left"]')[0]
+##        '//*[@id="snippet-s-result-articles"]/div[1]/div[1]/p[1]'
         
 
 
     value = el.text
-
+    print("count: ",el)
     print("count: ",value)
+
     regex = re.compile('[^0-9]')
     value_int = int(regex.sub('', el.text))
 
