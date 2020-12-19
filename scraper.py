@@ -83,12 +83,12 @@ sourceList = [
 ##		'type':"idnes_prodej",
 ##                'name':"count"
 ##	},
+##	{
+##		'url':'https://reality.idnes.cz/s/pronajem/byty/praha',
+##		'type':"idnes_pronajem",
+##                'name':"count"
+##	},
 	{
-		'url':'https://reality.idnes.cz/s/pronajem/byty/praha',
-		'type':"idnes_pronajem",
-                'name':"count"
-	}
-	,{
 		'url':'https://www.bezrealitky.cz/vyhledat#offerType=prodej&estateType=byt&locationInput=Praha%2C%20Hlavn%C3%AD%20m%C4%9Bsto%20Praha%2C%20%C4%8Cesko&limit=15',
 		'type':"bezrealitky_prodej",
                 'name':"count"
