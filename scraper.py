@@ -14,6 +14,16 @@ from datetime import datetime
 import re
 import os
 import configparser
+
+
+#############################################################
+
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+
+
+
+
+#############################################################
 config = configparser.ConfigParser()
 #config.read('./settings/config_local.ini')
 
@@ -67,115 +77,87 @@ options.add_argument("--no-sandbox"); # Bypass OS security model
 ##options.add_experimental_option("prefs", prefs)
 
 
+caps = DesiredCapabilities().CHROME
+caps["pageLoadStrategy"] = 'eager'
+
 sourceList = [
-##	{
-##		'url':'https://www.sreality.cz/hledani/prodej/byty/praha',
-##		'type':"sreality",
-##                'name':"count"
-##	},
-##	{
-##		'url':'https://www.sreality.cz/hledani/pronajem/byty/praha',
-##		'type':"sreality_pronajem",
-##                'name':"count"
-##	},
-##	{
-##		'url':'https://reality.idnes.cz/s/prodej/byty/praha',
-##		'type':"idnes_prodej",
-##                'name':"count"
-##	},
+	{
+		'url':'https://www.sreality.cz/hledani/prodej/byty/praha',
+		'type':"sreality",
+                'name':"count"
+	},
+	{
+		'url':'https://www.sreality.cz/hledani/pronajem/byty/praha',
+		'type':"sreality_pronajem",
+                'name':"count"
+	},
+
+	{
+		'url':'https://reality.idnes.cz/s/prodej/byty/praha',
+		'type':"idnes_prodej",
+                'name':"count"
+	},
+
 	{
 		'url':'https://reality.idnes.cz/s/pronajem/byty/praha',
 		'type':"idnes_pronajem",
                 'name':"count"
 	}
-##	,{
-##		'url':'https://www.bezrealitky.cz/vyhledat#offerType=prodej&estateType=byt&locationInput=Praha%2C%20Hlavn%C3%AD%20m%C4%9Bsto%20Praha%2C%20%C4%8Cesko&limit=15',
-##		'type':"bezrealitky_prodej",
-##                'name':"count"
-##	}
-##	,{
-##		'url':'https://www.bezrealitky.cz/vyhledat#offerType=pronajem&estateType=byt&locationInput=Praha%2C%20Hlavn%C3%AD%20m%C4%9Bsto%20Praha%2C%20%C4%8Cesko&limit=15',
-##		'type':"bezrealitky_pronajem",
-##                'name':"count"
-##	}
+
+	,{
+		'url':'https://www.bezrealitky.cz/vyhledat#offerType=prodej&estateType=byt&locationInput=Praha%2C%20Hlavn%C3%AD%20m%C4%9Bsto%20Praha%2C%20%C4%8Cesko&limit=15',
+		'type':"bezrealitky_prodej",
+                'name':"count"
+	}
+
+	,{
+		'url':'https://www.bezrealitky.cz/vyhledat#offerType=pronajem&estateType=byt&locationInput=Praha%2C%20Hlavn%C3%AD%20m%C4%9Bsto%20Praha%2C%20%C4%8Cesko&limit=15',
+		'type':"bezrealitky_pronajem",
+                'name':"count"
+	}
 
         
 ]
 
-def bezrealitky(driver):
-    script = """
-    var records = angular.element(document.getElementsByClassName("page-search")[0])
-        .injector()
-        .get("ServiceSearch")
-        .getRecords();
-    var output = [];
-    for(i=0; i< records.length; i++){
-        r = records[i];
-        output.push({
-            id: r.id,
-            title: r.title,
-            price: r.price,
-            surface: r.surface,
-            position: {
-                lat: r.marker.position.lat(),
-                lng: r.marker.position.lng(),
-            }
-        });
-    }
-    return output;
-    """
-    records = driver.execute_script(script)
-
-    
-##    with open("output.csv", "w") as file:
-##        file_writer = csv.writer(file)
-##        file_writer.writerow(["ID", "Název", "Cena", "Plocha", "Lat", "Lng"])
-##        for record in records:
-##            file_writer.writerow([
-##                record["id"],
-##                record["title"],
-##                record["price"],
-##                record["surface"],
-##                record["position"]["lat"],
-##                record["position"]["lng"],
-##            ])
-##    pass
-    return len(records)
 
 for source in sourceList:
 
-    driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH , chrome_options=options)
+    driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH , chrome_options=options,desired_capabilities=caps )
     
     print("url: ",source['url'])
+    ##--- sreality ---
     if (source['type'] == "sreality_pronajem" or source['type'] == "sreality" ):
         driver.get(source['url'])
         el = driver.find_elements(By.XPATH, '//span[@class="numero ng-binding"]')[1]
+    ##--- bezrealitky ---
     if (source['type'] ==  "bezrealitky_pronajem"):
         driver.get(source['url'])
-        el = str(bezrealitky(driver))
+        el = WebDriverWait(driver, 40).until(EC.presence_of_element_located((By.XPATH, '//*[@id="search-content"]/form/div[2]/div[3]/div/div[3]/p/strong/span/span')))
     if (source['type'] == "bezrealitky_prodej"):
         driver.get(source['url'])
-        el = driver.find_elements(By.XPATH, '//span[@class="text-no-break"]')[1]
+##        el = driver.find_elements(By.XPATH, '//*[@id="search-content"]/form/div[2]/div[3]/div/div[3]/p/strong/span/span')[0]
+##        el = driver.find_elements(By.XPATH, 'span[@class="text-no-break"]')[0]
+##        el = driver.find_element_by_xpath("//span[@class='text-no-break']")
+        el = WebDriverWait(driver, 40).until(EC.presence_of_element_located((By.XPATH, '//*[@id="search-content"]/form/div[2]/div[3]/div/div[3]/p/strong/span/span')))
+    ##--- idnes ---
     if (source['type'] == "idnes_prodej"):
         driver.get(source['url'])
         el = driver.find_elements(By.XPATH, '//p[@class="mb-10 h3 font-regular pull-t-left"]')[0]
     if (source['type'] == "idnes_pronajem"):
         driver.get(source['url'])
         el = driver.find_elements(By.XPATH, '//p[@class="mb-10 h3 font-regular pull-t-left"]')[0]
-##        '//*[@id="snippet-s-result-articles"]/div[1]/div[1]/p[1]'
         
 
 
     value = el.text
-    print("count: ",value)
-
+    print("************************************************************* count: ",value)
     regex = re.compile('[^0-9]')
     value_int = int(regex.sub('', el.text))
 
     values = Data(value, value_int, source['name'], source['type'])
     db.session.add(values)
     db.session.commit()
-    driver.close()
+##    driver.close()
     driver.quit()
     
 
